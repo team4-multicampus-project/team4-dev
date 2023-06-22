@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+<!-- 메인화면  -->
+{% block content %}
+<div class="d-flex justify-content-center align-items-center">
+  <div style="width: 50rem;">
+      <!-- 등록된 냉장고 있는 경우 -->
+      {% if friges %}
+        <h4 class="text-center mb-4 mt-4">냉장고 List</h4>
+          <!-- 냉장고 리스트 출력 -->
+          <div class="row justify-content-center">
+            {% for frige in friges %}
+              <div class="col-sm-7 mb-3">
+                <a class="btn btn-outline-success w-100" href="{% url 'frige:frige_state' frige.id %}">
+                  {{ frige.name }}
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+          <hr>
+          <!-- 냉장고 추가 등록 -->
+          <p class="text-center mb-4">냉장고 추가 등록</p>
+          <div class="row justify-content-center">
+            <form method="POST">
+              {% csrf_token %}
+                <div class="row mb-4">
+                  <div class="col-sm-5">
+                    <label for="{{ form.name.id_for_label }}" >냉장고 이름 
+                      <small class="text-muted">*영어</small>
+                    </label>
+                  </div>
+                  <div class="col-sm-7">{{ form.name }}</div>
+                </div>
+                <div class="d-flex justify-content-center align-items-center mt-3">
+                  <button type="submit" class="btn btn-success">추가</button>
+                </div>
+            </form>
+          </div>
+      <!-- 등록된 냉장고 없는 경우 -->
+      {% else %}
+        <h4 class="text-center mb-4 mt-4">냉장고 List</h4>
+        <div class="text-center row justify-content-center mb-4 mt-4">
+          <div class="card col-sm-5">
+            <div class="card-body text-center display-5">
+              등록된 냉장고가 없습니다ㅠ
+            </div>
+          </div>
+        </div>
+        <hr>
+        <!-- 냉장고 등록 -->
+        <h4 class="text-center mt-4">냉장고 등록</h4>
+        <div class="row justify-content-center">
+          <form method="POST">
+            {% csrf_token %}
+              <div class="row ">
+                <div class="col-sm-5 ">
+                  <label for="{{ form.name.id_for_label }}" >냉장고 이름 
+                    <small class="text-muted">*영어</small>
+                  </label>
+                </div>
+                <div class="col-sm-7">{{ form.name }}</div>
+              </div>
+              <div class="d-flex justify-content-center align-items-center mt-3">
+                <button type="submit" class="btn btn-outline-success">추가</button>
+              </div>
+          </form>
+        </div>
+      {% endif %}
+      <hr>
+      <!-- 다른 탭 -->
+      <div class="row justify-content-center mt-2">
+        <!-- 안주추천 -->
+        <div class="col-sm-7 mb-4">
+          <a class="btn btn-outline-success w-100" href="#">
+            안주 추천
+          </a>
+        </div>
+        <!-- 주류 추천 -->
+        <div class="col-sm-7 mb-4">
+          <a class="btn btn-outline-success w-100" href="#">
+            주류 추천
+          </a>
+        </div>
+        <!-- 커뮤니티 -->
+        <div class="col-sm-7 mb-4">
+          <a class="btn btn-outline-success w-100" href="#">
+            커뮤니티
+          </a>
+        </div>
+      </div>
+  </div>
+</div>
+{% endblock %}

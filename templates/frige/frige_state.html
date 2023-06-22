@@ -1,0 +1,107 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+
+<div class="d-flex justify-content-center align-items-center">
+    <div style="width: 50rem;">
+        <br>온도 가릴정도로 'br' 깔기<br>
+        <br><br>
+        {% if friges %}
+        <div class="row justify-content-start">
+            <h5 class="mx-4 pt-2">냉장고 list</h5>
+            {% for frige in friges %}
+                <div class="mb-4">
+                {% if frige.id == current_frige_id %}
+                    <a class="mx-2 btn btn-success disabled" href="{% url 'frige:frige_state' frige.id %}">
+                        {{ frige.name }}
+                    </a>
+                {% else %}
+                    <a class="mx-2 btn btn-outline-success" href="{% url 'frige:frige_state' frige.id %}">
+                        {{ frige.name }}
+                    </a>
+                {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="card mt-3 mb-5">
+            <div class="card-body">
+                <h5 id="frige_id" class="card-title">냉장고 id {{ frige.id }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted"> 이름 {{ frige.name }}</h6>
+                <h3>주류 목록</h3>
+                <ul>
+                    {% for drink in drinks %}
+                        <li>
+                            <p>{{ drink.name }}</p>
+                            <div class="quantity">
+                                <a href="#" class="minus" data-drink-id="{{ drink.id }}">-</a>
+                                <span id="result_{{ drink.id }}" class="result" data-drink-id="{{ drink.id }}">{{ drink.quantity }}</span>
+                                <a href="#" class="plus" data-drink-id="{{ drink.id }}">+</a>
+                            </div>
+                        </li>
+                    {% empty %}
+                        <li>등록된 주류가 없습니다.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block script %}
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".minus").click(function(e) {
+            e.preventDefault();
+            var drinkId = $(this).data("drink-id");
+            var resultElement = $("#result_" + drinkId);
+            var quantity = parseInt(resultElement.text());
+            if (quantity > 0) {
+                quantity--;
+                resultElement.text(quantity);
+                updateQuantity(drinkId, quantity);
+            }
+        });
+
+        $(".plus").click(function(e) {
+            e.preventDefault();
+            var drinkId = $(this).data("drink-id");
+            var resultElement = $("#result_" + drinkId);
+            var quantity = parseInt(resultElement.text());
+            quantity++;
+            resultElement.text(quantity);
+            updateQuantity(drinkId, quantity);
+        });
+
+        function updateQuantity(drinkId, quantity) {
+            var url = "{% url 'frige:handle_quantity' %}";
+            var data = {
+                drink_id: drinkId,
+                quantity: quantity
+            };
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function(response) {
+                    console.log("data pass success", response);
+                    if (response.status === "success") {
+                        $("#result").text(response.result);
+                    } else {
+                        console.log("Error: " + response.message);
+                    }
+                },
+                error: function(xhr, errmsg, err) {
+                    console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+        }
+    });
+</script>
+
+{% endblock script %}
+

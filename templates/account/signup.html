@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- 입력 칸 밑줄 css -->
+<style>
+  .underline-input {
+      border: none;
+      border-bottom: 1px solid #ccc;
+      outline: none;
+  }
+</style>
+
+<!-- main -->
+<div class="d-flex justify-content-center align-items-center">
+  <div style="width: 50rem;">
+    <h2 class="text-center">회원가입</h2>
+    <form method="post" class="form-group align-items-center">
+      {% csrf_token %}
+      <div class="container-fluid mx-auto px-5 mt-3 pt-2">
+        <!-- username -->
+        <div class="row mb-3">
+          <div class="col-sm-3">
+            <label for="{{ form.username.id_for_label }}" class="col-form-label">닉네임</label>
+          </div>
+          <div class="col-sm-8">
+            <input type="text" name="username" id="username" value="{{ form.username.value|default_if_none:'' }}" class="underline-input form-control">
+            <small class="text-muted mx-3"> * 닉네임최소 3글자 이상</small>
+          </div>
+        </div>
+        <!-- 이메일 -->
+        <div class="row mb-3">
+          <div class="col-sm-3">
+            <label for="{{ form.email.id_for_label }}" class="col-form-label">이메일</label>
+          </div>
+          <div class="col-sm-8">
+            <input type="text" name="email" id="email" value="{{ form.email.value|default_if_none:'' }}" class="underline-input form-control">
+            <small class="text-muted mx-3"> * 이메일 형식 </small>
+          </div>
+        </div>
+        <!-- 비밀번호1 -->
+        <div class="row mb-3">
+          <div class="col-sm-3">
+            <label for="{{ form.password1.id_for_label }}" class="col-form-label">비밀번호</label>
+          </div>
+          <div class="col-sm-8">
+            <input type="password" name="password1" id="password1" value="{{ form.password1.value|default_if_none:'' }}" class="underline-input form-control">
+            <small class="text-muted mx-3"> * 영문/숫자 조합 8자리 이상 </small>
+          </div>
+        </div>
+        <!-- 비밀번호2 -->
+        <div class="row mb-3">
+          <div class="col-sm-3">
+            <label for="{{ form.password1.id_for_label }}" class="col-form-label">비밀번호 확인</label>
+          </div>
+          <div class="col-sm-8">
+            <input type="password" name="password2" id="password2" value="{{ form.password2.value|default_if_none:'' }}" class="underline-input form-control">
+            <!-- 비밀번호가 일치합니다 or 일치하지 않습니다. -->
+            <small class="text-muted mx-3"><div id="passwordMatchStatus"></div></small>
+          </div>
+        </div>
+        <!-- 비밀번호 조건 메시지(비밀번호 조건 미충족시 메시지와 함께 return) -->
+        <div class="row mb-3">
+          <div class="col-sm-3"></div>
+          <div class="col-sm-8">
+            {% if form.password1.errors %}
+              <small class="text-danger">{{ form.password1.errors.as_text }}</small>
+            {% endif %}
+          </div>
+        </div>
+        <!-- 가입하기 -->
+        <div class="d-flex justify-content-center align-items-center mb-3">
+            <button type="submit" class="btn btn-success col-sm-6">가입하기</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 비밓번호 (빨 - 일치x, 파 - 일치o) -->
+<script>
+  // 스크립트를 실행할 때 페이지의 DOM 구조가 완전히 로드된 후에 실행되도록 설정
+  document.addEventListener("DOMContentLoaded", function() {
+
+    function checkPasswordMatch() {
+      var password = document.getElementById("password1").value;
+      var confirmPassword = document.getElementById("password2").value;
+      var passwordMatchStatus = document.getElementById("passwordMatchStatus");
+      var submitButton = document.getElementById("submitButton");
+    
+      if (password === confirmPassword) {
+        passwordMatchStatus.textContent = "비밀번호가 일치합니다.";
+        passwordMatchStatus.style.color = "blue";
+        submitButton.disabled = false;
+      } else {
+        passwordMatchStatus.textContent = "비밀번호가 일치하지 않습니다.";
+        passwordMatchStatus.style.color = "red";
+        submitButton.disabled = true;
+      }
+    }
+
+    // 비밀번호 일치 여부를 확인하는 이벤트 리스너를 등록
+    var passwordInputs = document.querySelectorAll("input[type='password']");
+    for (var i = 0; i < passwordInputs.length; i++) {
+      passwordInputs[i].addEventListener("input", checkPasswordMatch);
+    }
+  });
+</script>
+{% endblock %}
