@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 # 냉장고 등록 및 리스트 frige:frige_list  
-@login_required
+# @login_required
 def frige_list(request):
     user = request.user
     friges = Frige.objects.filter(user=user)
@@ -53,7 +53,7 @@ def frige_list(request):
 #     return render(request, 'frige/frige_list.html', context)
 
 # 냉장고 상태 및 주류 품목 조절
-@login_required
+# @login_required
 def frige_state(request, frige_id):
     frige = get_object_or_404(Frige, id=frige_id, user=request.user)
     drinks = frige.drinks.all()
