@@ -21,5 +21,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('', include('account.urls')),
     path('frige/', include('frige.urls')),
+    path("recommend/", include('recommend.urls')),
 ]
 
