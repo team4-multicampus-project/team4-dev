@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-mdxl(@jb9u&11q(8t-zhv1v@znxs%6uet34p#__t6sbtw+&pzy
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["172.30.1.104"]
 
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "frige",
     "account",
+    "recommend",
 ]
 
 MIDDLEWARE = [
