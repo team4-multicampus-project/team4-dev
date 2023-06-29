@@ -9,7 +9,7 @@ from django.urls import reverse
 import paho.mqtt.client as mqtt
 
 
-host_id = '172.30.1.104' # local IP(=Android)
+host_id = '172.20.10.5' # local IP(=Android)
 port = 1883
 _topic = "refri/"
 # MQTT 연결

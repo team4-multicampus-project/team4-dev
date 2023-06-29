@@ -1,6 +1,18 @@
 {% extends 'base.html' %}
+
 <!-- 메인화면  -->
 {% block content %}
+{% if user.is_authenticated %}
+<div class="d-flex justify-content-center align-items-center">
+    <div class="d-flex justify-content-between mb-3" style="width: 50rem;">
+        <form class="d-flex">
+            <a href="{% url 'account:logout' %}" class="fw-medium btn me-2" type="button">로그아웃</a>
+        </form>
+        <a class="mx-2 btn" href="{% url 'frige:frige_list'%}">메인으로 가기</a>
+    </div>
+</div>
+{% endif %}
+
 <div class="d-flex justify-content-center align-items-center">
   <div style="width: 50rem;">
       <!-- 등록된 냉장고 있는 경우 -->

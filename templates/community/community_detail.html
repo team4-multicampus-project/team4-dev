@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="d-flex justify-content-center align-items-center">
+    <div class="d-flex justify-content-between mb-3" style="width: 50rem;">
+        <form class="d-flex">
+            <a href="{% url 'account:logout' %}" class="fw-medium btn me-2" type="button">로그아웃</a>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<h2 class = "border-bottom py-2">
+    <i class="fa-solid fa-person-circle-question"></i>
+    {{post.subject}}
+</h2>
+<span>
+    작성자 : 
+    <strong>
+        {{post.user.username}}
+    </strong>
+</span>
+{% if request.user == post.user %}
+        <span class='mx-3'>
+            <a href ="{% url 'community:modify_post' post.id  %}" class='btn btn-dark'>수정</a>
+        </span>
+        <span >
+            <a href ='#' class='delete btn btn-sm btn-danger' data-uri = "{% url 'community:delete_post' post.id %}">삭제</a>
+        </span>
+    {% endif %}
+<!--card 를 이용하여 사진 등 첨부 가능 : ex. youtube 썸네일-->
+<div class = "card my-3">
+    <div class = "card-body">
+        <!--white space : 공백, 개행 등등 을 작성한 그대로-->
+        <div class = "card-text" style = "white-space : pre-line;">
+            {{post.content}}
+        </div>
+        <!--float와 비슷하게 정렬-->
+        <div class = "d-flex justify-content-end">
+            <!--badge : 사각형으로 둘러쌈-->
+            <div class = "badge badge-light p-2">
+                <div class = "badge badge-light p-2 text-left mx-3">
+                    {% if post.modify_date %}
+                        <div> {{post.modify_date}} <small>에 수정됨</small></div> 
+                    {% else %}
+                        <div> {{post.created_at}} </div>
+                    {% endif %}
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% comment %} <h5>{{question.answer_set.count}}개의 답변이 있습니다.</h5>
+<div>
+    <ul>
+        {% for answer in question.answer_set.all %}
+            <li>{{answer.content}}</li>
+        {% endfor %}
+    </ul>
+</div> {% endcomment %}
+
+{% comment %} <a href = "{% url 'index' %}">목록보기</a> {% endcomment %}
+<a href = "{% url 'community:community_list' %}">목록보기</a> <!--네임스페이스 설정-->
+
+{% comment %} <form action="{% url 'yannjuName:answer_create' question.id %}" method="post">
+{% comment %} <form action="" method="post"> {% endcomment %}
+    {% comment %} {% csrf_token %}
+    <textarea name="content" id="content" rows="15"></textarea>
+    <input type="submit" value="답변등록">
+</form>    {% endcomment %}
+{% endblock content %}
+
+{% block script %}
+<script>
+    $(document).ready(function() {
+        /* Delete */
+        $(".delete").on("click", function() {
+            console.log("Click")
+            if (confirm("정말로 삭제 하시겠습니까?")) {
+                location.href = $(this).data('uri');
+            }
+        });
+    });
+</script>
+{% endblock script %}
