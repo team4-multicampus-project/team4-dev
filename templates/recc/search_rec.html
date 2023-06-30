@@ -1,0 +1,16 @@
+<html>
+    <body>
+        
+        {% if result %}
+        {{ result | json_script:'jsonData'}}
+        name is : 
+        <script type = "text/javascript"> 
+            var placeData = JSON.parse(document.getElementById('jsonData').textContent);
+            console.log(placeData) ;
+            fin = JSON.parse(placeData) ;
+            console.log(fin) ;
+            document.write(fin.general[0]) ;        
+        </script>
+    {% endif %}
+    </body>   
+</html>
