@@ -36,9 +36,8 @@
               {% csrf_token %}
                 <div class="row mb-4">
                   <div class="col-sm-5">
-                    <label for="{{ form.name.id_for_label }}" >냉장고 이름 
-                      <small class="text-muted">*영어</small>
-                    </label>
+                    <label for="{{ form.name.id_for_label }}" >냉장고 이름 </label>
+                    <p><small class="text-muted">*내부 라벨에 적힌 ID 입력</small></p>
                   </div>
                   <div class="col-sm-7">{{ form.name }}</div>
                 </div>
@@ -65,9 +64,8 @@
             {% csrf_token %}
               <div class="row ">
                 <div class="col-sm-5 ">
-                  <label for="{{ form.name.id_for_label }}" >냉장고 이름 
-                    <small class="text-muted">*영어</small>
-                  </label>
+                  <label for="{{ form.name.id_for_label }}" >냉장고 이름</label>
+                  <p><small class="text-muted">*내부 라벨에 적힌 ID 입력</small></p>
                 </div>
                 <div class="col-sm-7">{{ form.name }}</div>
               </div>

@@ -10,6 +10,7 @@ import account.views as account
 
 # MQTT 연결
 client = account.client
+_topic = "refri/"
 
 # Create your views here.
 
@@ -19,6 +20,9 @@ def frige_list(request):
     user = request.user
     friges = Frige.objects.filter(user=user)
     form = FrigeForm()
+    
+    client.publish(f"{_topic}refriname", "")
+    print("Topic : {}, Refri : {}".format(f"{_topic}refriname", "main"))
 
     if request.method == 'POST':
         form = FrigeForm(request.POST)
