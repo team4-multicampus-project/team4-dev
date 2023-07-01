@@ -52,24 +52,29 @@
     </div>
 </div>
 
-{% comment %} <h5>{{question.answer_set.count}}개의 답변이 있습니다.</h5>
-<div>
-    <ul>
-        {% for answer in question.answer_set.all %}
-            <li>{{answer.content}}</li>
-        {% endfor %}
-    </ul>
-</div> {% endcomment %}
-
-{% comment %} <a href = "{% url 'index' %}">목록보기</a> {% endcomment %}
+{% include './comment_list.html' %}
 <a href = "{% url 'community:community_list' %}">목록보기</a> <!--네임스페이스 설정-->
+<form action="{% url 'community:comment_create' post.id %}" method="post">
+    {% comment %} <form action="" method="post"> {% endcomment %}
+        {% csrf_token %}
+        {% if form.errors %}
+        <div class = "alert alert-danger" role = "alert">
+            {% for field in form %}
+                {% if field.errors and field.label == '답변 내용'%}
+                    <strong>{{field.label}}</strong>
+                    {{field.errors}}
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
 
-{% comment %} <form action="{% url 'yannjuName:answer_create' question.id %}" method="post">
-{% comment %} <form action="" method="post"> {% endcomment %}
-    {% comment %} {% csrf_token %}
-    <textarea name="content" id="content" rows="15"></textarea>
-    <input type="submit" value="답변등록">
-</form>    {% endcomment %}
+        <div class = "form-group"> <!-- 로그인 없이 답변 불가-->
+            <textarea {% if not user.is_authenticated %} disabled='disabled'{% endif %} 
+            name="content" id="content" class = 'form-control' rows="8"></textarea>
+        </div>
+        <input {% if not user.is_authenticated %} disabled='disabled'{% endif %} 
+        type="submit" value="답변등록" class = 'btn btn-secondary'>
+    </form> 
 {% endblock content %}
 
 {% block script %}

@@ -7,7 +7,7 @@ import pymysql
 
 def index(request):
     # MySQL 데이터베이스 연결
-    conn = pymysql.connect(host="team4rds.cpa0spimmjj8.us-east-2.rds.amazonaws.com", port=3306, 
+    conn = pymysql.connect(host="team4rds.cpa0spimmjj8.us-east-2.rds.amazonaws.com", port=3307, 
                            user='admin', passwd='team4123', db='team4rds', charset='utf8')
     cur = conn.cursor()
 
@@ -63,5 +63,3 @@ def index(request):
     reportgraph = plt.to_html()
 
     return render(request, 'report/drink_report.html', {'report':reportgraph})
-
-

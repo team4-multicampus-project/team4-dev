@@ -33,12 +33,11 @@ def create_post(request):
     '''
     if request.method == 'POST':
         form = PostForm(request.POST)
-        # 여기서 request.FILES 하고 save 아래에서 하니까 아래 코드 한 줄 필요 없음!
         if form.is_valid():
-            problem = form.save(commit=False)
-            problem.created_at = timezone.now()
-            problem.user = request.user
-            problem.save()
+            post = form.save(commit=False)
+            post.created_at = timezone.now()
+            post.user = request.user
+            post.save()
             return redirect('community:community_list')
     else:
         form = PostForm()

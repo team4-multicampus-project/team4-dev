@@ -1,0 +1,55 @@
+{% comment %} {% load yannnju_filter %} {% endcomment %}
+
+<h5 class = "border-bottom my-3 py-2">
+    <i class="fa-solid fa-terminal"></i>
+    {{post.comment.count}}개의 답변이 있습니다.
+</h5>
+
+{% for answer in question.answer_set.all %}
+    <a name="answer_{{answer.id}}"></a> <!--화면에는 안보임-->  
+    <div class = 'row my-3'>
+        {% comment %} <!-- 추천영역 -->
+        <div class='col-1'>
+            <div class = 'bg-light text-center p-3 border font-weight-border mb-1'>
+                {{answer.voter.count}}
+            </div>
+            <a href="#" class = 'recommend btn btn-sm btn-secondary btn-block my-1'
+            data-uri="{% url 'yannjuName:vote_answer' answer.id %}">
+             추천
+            </a>
+        </div> {% endcomment %}
+        <!-- 답변영역 -->
+        <div class='col-11'>
+            <div class = "card">
+                <div class = "card-body">
+                    {% comment %} <div class = "card-text" style = "white-space : pre-line;"> {% endcomment %}
+                    <div class = "card-text">
+                        {{comment.content}}
+                    </div>
+                    <div class = "d-flex justify-content-end">
+                        {% if comment.modify_date %}
+                            <div class = "badge badge-light p-2 text-left mx-3">
+                                <div class = 'mb-2' >Modified at</div>  
+                                <div> {{comment.modify_date}} </div> 
+                            </div>
+                        {% endif %}
+                        <div class = "badge badge-light p-2 text-left">
+                            <div class='mb-2'>{{comment.user.username}}</div>
+                            {{comment.created_at}}
+                        </div>
+                    </div>
+                    {% if request.user == comment.user%}
+                        <div class="my-3">
+                            <span class='mx-3'>
+                                <a href = "{% url 'community:comment_modify' comment.id %}" class = "btn btn-sm btn-outline-secondary">수정</a>
+                            </span>
+                            <span>
+                                <a href = "#"  class = "delete btn btn-sm btn-outline-danger" data-uri="{% url 'community:comment_delete' comment.id %}">삭제</a>
+                            </span>    
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

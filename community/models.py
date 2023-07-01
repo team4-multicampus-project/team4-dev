@@ -1,5 +1,6 @@
 from django.db import models
 from account.models import CustomUser
+from django.utils import timezone
 
 # Create your models here.
 class Post(models.Model):
@@ -15,4 +16,5 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, default="")
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, default="")
     content = models.TextField('내용')
+    created_at = models.DateTimeField('날짜')
     modify_date = models.DateTimeField(null=True, blank=True)
