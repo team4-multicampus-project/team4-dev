@@ -4,10 +4,12 @@ from datetime import datetime, timedelta
 # from pymysql import render
 from django.shortcuts import render
 import pymysql
+from PIL import Image
+import os
 
 def index(request):
     # MySQL 데이터베이스 연결
-    conn = pymysql.connect(host="team4rds.cpa0spimmjj8.us-east-2.rds.amazonaws.com", port=3307, 
+    conn = pymysql.connect(host="team4rds.cpa0spimmjj8.us-east-2.rds.amazonaws.com", port=3306, 
                            user='admin', passwd='team4123', db='team4rds', charset='utf8')
     cur = conn.cursor()
 
@@ -47,19 +49,23 @@ def index(request):
 
     # drinkname 별로 quantity 합산
     drink_totals = filtered_df.groupby('drinkname')['quantity'].sum()
+    if (len(drink_totals) > 0):
 
-    # 막대 그래프 생성
-    plt.bar(drink_totals.index, drink_totals.values)
-    plt.xlabel('술')
-    plt.ylabel('합산된 개수')
-    plt.title('최근 일주일간 주류 리포트')
+        # 막대 그래프 생성
+        plt.bar(drink_totals.index, drink_totals.values)
+        plt.xlabel('술')
+        plt.ylabel('합산된 개수')
+        plt.title('최근 일주일간 주류 리포트')
 
-    # Y축 눈금 설정
-    plt.yticks(range(int(min(drink_totals.values)), int(max(drink_totals.values))+1))
+        # Y축 눈금 설정
+        plt.yticks(range(int(min(drink_totals.values)), int(max(drink_totals.values))+1))
 
-    # 그래프 출력
-    plt.tight_layout()
-    plt.show()
-    reportgraph = plt.to_html()
+        # 그래프 출력
+        plt.tight_layout()
+        plt.show()
+        reportgraph = plt.to_html()
+    else:
+        reportgraph =  ""
+        print("데이터가 부족합니다.")
 
     return render(request, 'report/drink_report.html', {'report':reportgraph})

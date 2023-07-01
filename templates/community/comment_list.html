@@ -1,55 +1,24 @@
-{% comment %} {% load yannnju_filter %} {% endcomment %}
-
-<h5 class = "border-bottom my-3 py-2">
-    <i class="fa-solid fa-terminal"></i>
-    {{post.comment.count}}개의 답변이 있습니다.
-</h5>
-
-{% for answer in question.answer_set.all %}
-    <a name="answer_{{answer.id}}"></a> <!--화면에는 안보임-->  
-    <div class = 'row my-3'>
-        {% comment %} <!-- 추천영역 -->
-        <div class='col-1'>
-            <div class = 'bg-light text-center p-3 border font-weight-border mb-1'>
-                {{answer.voter.count}}
-            </div>
-            <a href="#" class = 'recommend btn btn-sm btn-secondary btn-block my-1'
-            data-uri="{% url 'yannjuName:vote_answer' answer.id %}">
-             추천
-            </a>
-        </div> {% endcomment %}
-        <!-- 답변영역 -->
-        <div class='col-11'>
-            <div class = "card">
-                <div class = "card-body">
-                    {% comment %} <div class = "card-text" style = "white-space : pre-line;"> {% endcomment %}
-                    <div class = "card-text">
-                        {{comment.content}}
+<!--Comment Line-->
+<div style = "font-size: small">
+    {% if post.comment_set.count > 0 %}
+        {% for comment in post.comment_set.all %}
+            <div style = 'padding: 20px 10px 20px 10px;'>
+                {% if comment.user == post.user %} <strong style = 'color:#eb5d56'>[작성자]</strong>{% endif %} <strong>{{comment.user.username}}</strong>
+                {% if comment.modify_date %}
+                    <div style = "color:#c3c4c4">{{comment.modify_date}}(수정됨)</div>
+                {% else %}
+                    <div style = "color:#c3c4c4">{{comment.create_date}}</div>
+                {% endif %}
+                <div style = 'padding-left : 30px; padding-right : 30px;'> 
+                    {{comment.content}} 
+                    {% if request.user == comment.user %}
+                    <div class = 'd-flex justify-content-end'>
+                        <a href = "{% url 'community:comment_modify' comment.id %}" class="btn btn-outline-secondary" role="button" style = "margin: 0px 2px">수정</a>
+                        <a href="#" data-uri = "{% url 'community:comment_delete' comment.id %}" class="delete_comment btn btn-outline-danger" role="button" style = "margin: 0px 2px">삭제</a>
                     </div>
-                    <div class = "d-flex justify-content-end">
-                        {% if comment.modify_date %}
-                            <div class = "badge badge-light p-2 text-left mx-3">
-                                <div class = 'mb-2' >Modified at</div>  
-                                <div> {{comment.modify_date}} </div> 
-                            </div>
-                        {% endif %}
-                        <div class = "badge badge-light p-2 text-left">
-                            <div class='mb-2'>{{comment.user.username}}</div>
-                            {{comment.created_at}}
-                        </div>
-                    </div>
-                    {% if request.user == comment.user%}
-                        <div class="my-3">
-                            <span class='mx-3'>
-                                <a href = "{% url 'community:comment_modify' comment.id %}" class = "btn btn-sm btn-outline-secondary">수정</a>
-                            </span>
-                            <span>
-                                <a href = "#"  class = "delete btn btn-sm btn-outline-danger" data-uri="{% url 'community:comment_delete' comment.id %}">삭제</a>
-                            </span>    
-                        </div>
                     {% endif %}
                 </div>
             </div>
-        </div>
-    </div>
-{% endfor %}
+        {% endfor %}
+    {% endif %}
+</div>

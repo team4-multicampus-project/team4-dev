@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
+{%load static%}
 
 {% block content %}
-  <img src="{{ image_path }}" alt="Drink Report">
+  {% if report == "" %}
+  <center>
+    <img src= "{%static 'image.png'%}"/>
+  </center>
+  {% else %}
   <div>{{report}}</div>
+  {% endif %}
 {% endblock %}

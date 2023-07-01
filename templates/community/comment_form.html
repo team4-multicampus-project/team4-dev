@@ -2,13 +2,43 @@
 {% load bootstrap4 %}
 
 {% block content %}
+    {% if user.is_authenticated %}
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="d-flex justify-content-between mb-3" style="width: 50rem;">
+            <form class="d-flex">
+                <a href="{% url 'account:logout' %}" class="fw-medium btn me-2" type="button">로그아웃</a>
+            </form>
+            <a class="mx-2 btn" href = "{% url 'community:community_list' %}">목록보기</a>
+        </div>
+    </div>
+    {% endif %}
     <div class='container my-3'>
         <h5 class='border-bottom pb-2'>
             댓글 등록 하기 🐤
         </h5>
-        <form method='post' class = 'post-form my-3'>
+        <form method='post' class = 'post-form my-3' enctype="multipart/form-data">
+            {% csrf_token %}
             {% csrf_token %}
             {%bootstrap_form form%}
+            <!--{{form.as_p}} as_p : <p>태그로 묶어서 입력을 보내겠다는 의미-->
+                
+            <!--Post_form.html-->
+            {% block style %}
+            <link rel = 'stylesheet' href = " {% static 'summernote-bs4.min.css' %}">
+            {% endblock style %}
+
+            {% block script %}
+            <script src = "{% static 'summernote-ko-KR.min.js' %}"></script>
+
+            <script>
+                $(function() {
+                    //SummberNote
+                    $('#id_content').summernote({
+                        height:300
+                    })
+                })
+            </script>
+            {% endblock script %}
 
             <button type='submit' class="btn btn-primary"> 저장하기 </button>
         </form>

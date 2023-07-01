@@ -19,8 +19,7 @@ def comment_create(request, post_id):
             comment.post = post
             comment.save()
             
-            url = resolve_url('community:community_detail', post_id = post.id)
-            return redirect(f'{url}#comment_{comment.id}')
+            return redirect('community:community_detail', post_id = post.id)
     else:
         form = CommentForm()
         
