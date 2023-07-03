@@ -5,6 +5,12 @@ from django.contrib.auth.decorators import login_required
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+# MQTT 통신
+import account.views as account
+
+# MQTT 연결
+client = account.client
+
 # Create your views here.
 
 # 냉장고 등록 및 리스트 frige:frige_list  
@@ -58,6 +64,9 @@ def frige_state(request, frige_id):
     frige = get_object_or_404(Frige, id=frige_id, user=request.user)
     drinks = frige.drinks.all()
     current_frige_id = frige.id  # 현재 페이지의 냉장고 ID
+    
+    client.publish(f"{_topic}refriname", frige.name)
+    print("Topic : {}, Refri : {}".format(f"{_topic}refriname", frige.name))
 
     user = request.user
     friges = Frige.objects.filter(user=user)

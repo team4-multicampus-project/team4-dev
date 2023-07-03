@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<html>
+    <body>
+        <form method="get" action="{% url 'recommend:index' %}">
+            <div>
+                <label for="alco">주류명</label>
+                <input id="alco" name="alco" placeholder="주류명을 입력하세요" type="text" value="{{ request.GET.alco }}">
+                <button>추천</button>
+            </div>
+        </form>  
+        <br>
+        {% if result %}        
+            전체 주류내에서 추천 
+            <ul>
+            {% for item in result.general %}
+                <div>{{ item }}</div>
+                {% if forloop.counter|divisibleby:6 and not forloop.last %}
+                <hr style="border-top: 1px dashed black; margin: 10px 0;"> <!-- 수정된 부분: 6번째 정보마다 선 추가 -->
+                {% endif %}
+            {% endfor %}
+            </ul>
+            
+            <br>
+            <hr style="border-top: 1px solid black; margin: 10px 0;">
+            같은 주류내에서 추천 
+            <ul>
+            {% for item in result.alc_cate %}
+                <div>{{ item }}</div>
+                {% if forloop.counter|divisibleby:8 and not forloop.last %}
+                <hr style="border-top: 1px dashed black; margin: 10px 0;"> <!-- 수정된 부분: 8번째 정보마다 선 추가 -->
+                {% endif %}
+            {% endfor %}
+            </ul>
+        {% else %}
+        <div>검색어를 입력하세요.</div> <!-- 검색어를 입력하지 않았을 때 메시지 표시 -->
+
+        {% endif %}
+    </body>   
+</html>
+
+{% endblock %} 

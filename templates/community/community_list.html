@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="d-flex justify-content-center align-items-center">
+    <div class="d-flex justify-content-between mb-3" style="width: 50rem;">
+        <form class="d-flex">
+            <a href="{% url 'account:logout' %}" class="fw-medium btn me-2" type="button">로그아웃</a>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<div class="d-flex justify-content-center align-items-center">
+    <h2>커뮤니티</h2>
+</div> 
+<div>
+    {% if post_list %}
+        {% for post in post_list %}
+            <div class = "card">
+                <div class = "card-title">
+                    <h2 style="margin-top:20px; margin-left:15px">
+                        <a href = "{% url 'community:community_detail' post.id %}" style = "text-decoration:none; color: inherit;" >{{post.subject}}</a>
+                    </h2>
+                </div>
+                <div class = "card-body" style = "display : -webkit-box; -webkit-line-clamp : 3; -webkit-box-orient : vertical;">
+                    <a href = "{% url 'community:community_detail' post.id %}" style = "text-decoration:none; color: inherit;" >
+                        {{post.content|striptags|cut:"&nbsp;" }}
+                    </a>
+                    <div class = "d-flex justify-content-end">
+                        <!--badge : 사각형으로 둘러쌈-->
+                        <div class = "badge badge-gray p-2">
+                            {{post.user.username}}
+                        </div>
+                        <div class = "badge badge-light p-2">
+                            {% if post.modify_date %}
+                                <div> {{post.modify_date}} <small>에 수정됨</small></div> 
+                            {% else %}
+                                <div> {{post.created_at}} </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>게시글이 없습니다.</p>
+    {% endif %}
+</div>
+
+<div class='d-flex flex-row-reverse mb-3'>
+    <a href="{% url 'community:create_post' %}" class='btn'>
+      <i class="fa-regular fa-note-sticky"></i>
+      글작성
+    </a>
+</div>
+
+{% endblock content %}
+
+{% block script %}
+<script type="text/javascript">
+{% endblock script %}

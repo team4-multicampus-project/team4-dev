@@ -7,9 +7,9 @@ from django.contrib.auth.views import LoginView
 from django.urls import reverse
 # MQTT 통신
 import paho.mqtt.client as mqtt
+import core.settings as settings
 
-
-host_id = '172.30.1.104' # local IP(=Android)
+host_id = settings.MQTT_BROKER_URL
 port = 1883
 _topic = "refri/"
 # MQTT 연결

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="get" action="{% url 'recommend:search' %}">
+    <div>
+        <label for="city">City</label>
+        <input value="{{city}}" id="city" name="city" placeholder="Search by City" type="text">
+    </div>
+    <button>Search</button>
+</form>
+{{ city }}
+{{ weather }}
+{% for rec in recc %}
+    {% for r in rec %}
+    <div>{{r}}</div>
+    {% if forloop.counter|divisibleby:7 and not forloop.last %}
+    <hr style="border-top: 1px solid black; margin: 10px 0;"> <!-- 수정된 부분: 7번째 정보마다 선 추가 -->
+    {% endif %}
+    {% endfor %}
+{% endfor %}
+
+{% endblock %}

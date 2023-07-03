@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,8 @@ SECRET_KEY = "django-insecure-mdxl(@jb9u&11q(8t-zhv1v@znxs%6uet34p#__t6sbtw+&pzy
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["172.30.1.85", "172.20.10.5", "127.0.0.1"]
+MQTT_BROKER_URL = "172.30.1.85"
 
 
 # Application definition
@@ -39,6 +41,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "frige",
     "account",
+    "recommend",
+    "community",
 ]
 
 MIDDLEWARE = [
@@ -112,9 +116,6 @@ DATABASES = {
 #         "OPTIONS": {"init_command": "SET sql_mode='STRICT_TRANS_TABLES'"},
 #     }
 # }
-# import os
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

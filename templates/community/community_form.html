@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% block content %}
+    <div class = "container">
+        <h5 class = "my-3 border-bottom pb-2">
+            <i class="fa-solid fa-thumbtack"></i>
+            글 작성
+        </h5> 
+        <form method="post" class="post-form my-3">
+            {% csrf_token %}
+            {%bootstrap_form form%}
+            <!--{{form.as_p}} as_p : <p>태그로 묶어서 입력을 보내겠다는 의미-->
+
+            <div>
+                <button type="submit" class = "btn btn-success mt-2">
+                <i class="fa-regular fa-paper-plane"></i>
+                게시글 업로드
+                </button>
+            </div>
+
+            <div  class='my-2'>
+                <a href = '{% url 'community:community_list' %}'>
+                    목록으로
+                </a>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
