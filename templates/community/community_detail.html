@@ -7,6 +7,7 @@
         <form class="d-flex">
             <a href="{% url 'account:logout' %}" class="fw-medium btn me-2" type="button">로그아웃</a>
         </form>
+        <a class="mx-2 btn" href = "{% url 'community:community_list' %}">목록보기</a>
     </div>
 </div>
 {% endif %}
@@ -53,7 +54,6 @@
 </div>
 
 {% include './comment_list.html' %}
-<a href = "{% url 'community:community_list' %}">목록보기</a> <!--네임스페이스 설정-->
 <form action="{% url 'community:comment_create' post.id %}" method="post">
     {% comment %} <form action="" method="post"> {% endcomment %}
         {% csrf_token %}
@@ -86,6 +86,11 @@
             if (confirm("정말로 삭제 하시겠습니까?")) {
                 location.href = $(this).data('uri');
             }
+        });
+        $(".delete_comment").on("click", function() {
+          if (confirm("정말로 삭제하시겠습니까?")) {
+            location.href = $(this).data('uri');
+          }
         });
     });
 </script>

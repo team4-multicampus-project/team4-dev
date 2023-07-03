@@ -32,7 +32,7 @@ def percent(dosu):
     regularised = min_max_scaler.fit_transform(dist_matrix)
 
     # 1에서 빼줘서 더 가까운 것이 우선순위를 갖도록 변경하기
-    one_matrix = np.ones((1488,1488))
+    one_matrix = np.ones((1410,1410))
 
     final_dist = one_matrix - regularised
 
@@ -64,14 +64,16 @@ def flavour_dosu(cosine_sim, final_dist):
 # 주종에 상관 없이 도수와 풍미만 고려해 비슷한 술을 추천해줌
 # 항목: 도수, 풍미 (약 6개 항목)
 
-# 고유 id를 넣으면 해당 술과 비슷한 Top 10의 id를 return
+# 주류명을 넣으면 해당 술과 비슷한 Top 10의 주류명을 return
 def general_recommendation(input_id, new_sim):
     
+    alco_list = []  # 결과를 저장할 리스트
+
     # 주류명으로 index 찾기 
     idx = alco.index[alco['주류명'] == input_id].tolist() # Int64Index 형식이라 list로 바꾸어줌
     
     # 해당 index의 유사도 리스트 sort in descending order
-    score_series = pd.Series(new_sim[idx[0]]).sort_values(ascending = False)
+    score_series = pd.Series(new_sim[idx[0]]).sort_values(ascending=False)
     
     # 유사도 Top 10의 index 추출
     top_10_indexes = list(score_series.iloc[1:11].index)
@@ -81,15 +83,26 @@ def general_recommendation(input_id, new_sim):
         top_10_indexes = list(score_series.iloc[1:12].index)
         top_10_indexes.remove(idx[0])
     
-    # 고유 id를 담기 위한 empty list 생성
+    # 고유 주류명을 담기 위한 empty list 생성
     top_10_id = []
     
-    # id list
+    # 주류명 list
     for i in top_10_indexes:
         id = alco.loc[i]['주류명']
         top_10_id.append(id)
     
-    return top_10_id
+    for i in range(0, 10):
+        filtered_alco = alco[alco['주류명'] == top_10_id[i]]  # 주류명이 일치하는 데이터 필터링
+        filtered_data = filtered_alco[[ '주류','주류명', '생산국가', '도수','음용온도','특징']].fillna('')  # 가져오고자 하는 열을 선택
+        for _, row in filtered_data.iterrows():
+            for key, value in row.items():
+                if key not in ['id', '용량'] and pd.notnull(value):
+                    filtered_data= f"{key} : {value}"
+                    alco_list.append(filtered_data)  # 필터링된 데이터를 리스트에 추가
+                    # print(f'{key}: {value}')
+
+    return alco_list
+
 
 def wine_sim(alco):
     # wine word list 만들기
@@ -214,6 +227,8 @@ def is_wine(input_id):
 # 와인의 고유 id를 넣으면 해당 와인과 비슷한 Top 10 와인의 id를 return
 def wine_recommendation(input_id, wine_new_sim,wine_idx):
     
+    w_list = []  # 결과를 저장할 리스트
+
     # 주류명으로 index 찾기 
     idx = alco.index[alco['주류명'] == input_id].tolist() # Int64Index 형식이라 list로 바꾸어줌
     
@@ -221,7 +236,7 @@ def wine_recommendation(input_id, wine_new_sim,wine_idx):
     w_idx = wine_idx.index(idx[0])
     
     # 해당 index의 유사도 리스트 sort in descending order
-    score_series = pd.Series(wine_new_sim[w_idx]).sort_values(ascending = False)
+    score_series = pd.Series(wine_new_sim[w_idx]).sort_values(ascending=False)
     
     # 유사도 Top 10의 index 추출
     wine_top_10_indexes = list(score_series.iloc[1:11].index)
@@ -231,16 +246,27 @@ def wine_recommendation(input_id, wine_new_sim,wine_idx):
         wine_top_10_indexes = list(score_series.iloc[1:12].index)
         wine_top_10_indexes.remove(w_idx)
     
-    # 고유 id를 담기 위한 empty list 생성
+    # 고유 주류명을 담기 위한 empty list 생성
     wine_top_10_id = []
     
-    # id list
+    # 주류명 list
     for i in wine_top_10_indexes:
         index = wine_idx[i] # wine list에서 몇번째인지가 아니라 전체 술 list에서 몇번째인지 구함
         id = alco.loc[index]['주류명']
         wine_top_10_id.append(id)
     
-    return wine_top_10_id
+    for i in range(0, 10):
+        filtered_alco = alco[alco['주류명'] == wine_top_10_id[i]]  # 주류명이 일치하는 데이터 필터링
+        filtered_data = filtered_alco[[ '주류', '중분류', '주류명', '생산국가', '포도품종','도수','음용온도','추천음식']].fillna('')  # 가져오고자 하는 열을 선택
+        for _, row in filtered_data.iterrows():
+            for key, value in row.items():
+                if key not in ['id', '용량'] and pd.notnull(value):
+                    filtered_data= f"{key} : {value}"
+                    w_list.append(filtered_data)  # 필터링된 데이터를 리스트에 추가
+                    # print(f'{key}: {value}')   
+
+    return w_list
+
 
 # 해당 id의 술이 전통주인지 체크
 def is_kor(input_id):
@@ -249,8 +275,10 @@ def is_kor(input_id):
     return result
 
 #  전통주의 고유 id를 넣으면 해당 전통주와 비슷한 Top 10 전통주의 주류명를 return
-def kor_recommendation(input_id, kor_new_sim,kor_idx):
+def kor_recommendation(input_id, kor_new_sim, kor_idx):
     
+    k_list = []  # 결과를 저장할 리스트
+
     # 주류명으로 index 찾기 
     idx = alco.index[alco['주류명'] == input_id].tolist() # Int64Index 형식이라 list로 바꾸어줌
     
@@ -258,7 +286,7 @@ def kor_recommendation(input_id, kor_new_sim,kor_idx):
     k_idx = kor_idx.index(idx[0])
     
     # 해당 index의 유사도 리스트 sort in descending order
-    score_series = pd.Series(kor_new_sim[k_idx]).sort_values(ascending = False)
+    score_series = pd.Series(kor_new_sim[k_idx]).sort_values(ascending=False)
     
     # 유사도 Top 10의 index 추출
     kor_top_10_indexes = list(score_series.iloc[1:11].index)
@@ -268,16 +296,27 @@ def kor_recommendation(input_id, kor_new_sim,kor_idx):
         kor_top_10_indexes = list(score_series.iloc[1:12].index)
         kor_top_10_indexes.remove(k_idx)
     
-    # 고유 id를 담기 위한 empty list 생성
+    # 고유 주류명을 담기 위한 empty list 생성
     kor_top_10_id = []
     
-    # id list
+    # 주류명 list
     for i in kor_top_10_indexes:
         index = kor_idx[i] # wine list에서 몇번째인지가 아니라 전체 술 list에서 몇번째인지 구함
         id = alco.loc[index]['주류명']
         kor_top_10_id.append(id)
     
-    return kor_top_10_id
+    for i in range(0, 10):
+        filtered_alco = alco[alco['주류명'] == kor_top_10_id[i]]  # 주류명이 일치하는 데이터 필터링
+        filtered_data = filtered_alco[['주류', '중분류','주류명',  '생산국가', '주원료','도수','음용온도','특징']].fillna('')  # 가져오고자 하는 열을 선택
+        for _, row in filtered_data.iterrows():
+            for key, value in row.items():
+                if key not in ['id', '용량'] and pd.notnull(value):
+                    filtered_data= f"{key} : {value}"
+                    k_list.append(filtered_data)  # 필터링된 데이터를 리스트에 추가
+                    # print(f'{key}: {value}')
+            
+    return k_list
+
 
 def recom(test_num):
 
@@ -290,21 +329,24 @@ def recom(test_num):
     new_sim = flavour_dosu(cosine_sim, final_dist)
     wine_new_sim,wine_idx = wine_sim(alc)
     kor_new_sim,kor_idx =kor_sim(alc)
-    ge_re = general_recommendation(test_num,new_sim) # 고유 id를 넣으면 주류상관없이 비슷한 술 top10 추천  
+
+    if not test_num :  # 검색어가 비어있는 경우 빈 리스트 반환
+        return {"general": [], "alc_cate": []}
+    
+    ge_re = general_recommendation(test_num, new_sim) # 주류명을 넣으면 주류상관없이 비슷한 술 top10 추천  
 
     if is_wine(test_num) == True:
-        realco = wine_recommendation(test_num,wine_new_sim,wine_idx)# 와인의 고유 id를 넣으면 해당 와인과 비슷한 Top 10 와인의 주류명 출력 
+        realco = wine_recommendation(test_num,wine_new_sim,wine_idx)# 와인 주류명을 넣으면 해당 와인과 비슷한 Top 10 와인의 주류명 출력 
     elif is_kor(test_num) == True:
-        realco = kor_recommendation(test_num,kor_new_sim,kor_idx)# 전통주 id를 넣으면 해당 전통주와 비슷한 top10 와인의 주류명을 출력 
+        realco = kor_recommendation(test_num,kor_new_sim,kor_idx)# 전통주 주류명을 넣으면 해당 전통주와 비슷한 top10 와인의 주류명을 출력 
     else :
-        realco = '해당 주류는 와인,전통주가 아닙니다.'
+        realco = ''
     # print(ge_re)
     # print(realco)
     contx_dic = {
     'general': ge_re,
     'alc_cate': realco,
             }
-    result = json.dumps(contx_dic,ensure_ascii=False)
-    return result
+    
+    return contx_dic
 
-recom('서울의 밤')

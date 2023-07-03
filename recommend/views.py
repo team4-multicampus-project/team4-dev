@@ -16,10 +16,14 @@ import json
 # Create your views here.
 
 def index(request) :    
-    result = recom('서울의 밤')
-    data = pd.read_csv('wth.csv')
-    context = {"result" : result, "data":data }
-    return render(request, 'recc/search_rec.html', context)
+    alco_search = request.GET.get("alco", '')
+    if alco_search is not None:
+        result = recom(alco_search)
+        context = {"result" : result}
+        return render(request, 'recc/search_rec.html', context)
+    else:
+        return render(request, 'recc/search_rec.html')
+
 
 def weather(request):
     user_location = request.GET.get("city")
