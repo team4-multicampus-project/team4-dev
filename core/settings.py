@@ -44,10 +44,7 @@ INSTALLED_APPS = [
     "account",
     "recommend",
     "community",
-<<<<<<< HEAD
     "report",
-=======
->>>>>>> cc62b2b4664aae04f0379980b5e6d6b268e5c912
 ]
 
 MIDDLEWARE = [
