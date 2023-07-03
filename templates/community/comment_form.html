@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load bootstrap4 %}
 
 {% block content %}
@@ -14,10 +15,9 @@
     {% endif %}
     <div class='container my-3'>
         <h5 class='border-bottom pb-2'>
-            댓글 등록 하기 🐤
+            댓글 수정 하기 🍷
         </h5>
         <form method='post' class = 'post-form my-3' enctype="multipart/form-data">
-            {% csrf_token %}
             {% csrf_token %}
             {%bootstrap_form form%}
             <!--{{form.as_p}} as_p : <p>태그로 묶어서 입력을 보내겠다는 의미-->
