@@ -48,10 +48,12 @@ def signup(request):
             auth_login(request, user)
             messages.success(request, '회원가입이 완료되었습니다. 로그인해주세요.')
             return redirect('account:login')
-        else: print("다시 회원가입해주세요")
-    else:
-        form = SignupForm()
-    return render(request, 'account/signup.html', {'form': form})
+        else:
+            print("다시 회원가입해주세요")
+            print(form.errors)
+
+    context = {'form': form}
+    return render(request, 'account/signup.html', context)
 
 # 로그인 account:login
 class CustomLoginView(LoginView):

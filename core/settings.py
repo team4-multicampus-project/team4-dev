@@ -26,9 +26,11 @@ SECRET_KEY = "django-insecure-mdxl(@jb9u&11q(8t-zhv1v@znxs%6uet34p#__t6sbtw+&pzy
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["172.30.1.68", "172.20.10.5"]
-MQTT_BROKER_URL = "172.30.1.68"
+#ALLOWED_HOSTS = ["172.30.1.68", "172.20.10.5"]
+#MQTT_BROKER_URL = "172.30.1.68"
 
+
+CSRF_TRUSTED_ORIGINS = ['http://ex-alb-1767737241.us-east-2.elb.amazonaws.com']
 
 # Application definition
 
@@ -39,7 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "bootstrap4",
+    #"bootstrap4",
     "frige",
     "account",
     "recommend",
@@ -95,17 +97,17 @@ WSGI_APPLICATION = "core.wsgi.application"
 #     }
 # }
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",  # engine: mysql
-        "NAME": "team4rds",  # DB Name
-        "USER": "admin",  # DB User
-        "PASSWORD": "team4123",  # Password
-        "HOST": "team4rds.cpa0spimmjj8.us-east-2.rds.amazonaws.com",  # 생성한 데이터베이스 엔드포인트
-        "PORT": "3306",  # 데이터베이스 포트
-        "OPTIONS": {"init_command": "SET sql_mode='STRICT_TRANS_TABLES'"},
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",  # engine: mysql
+#         "NAME": "team4rds",  # DB Name
+#         "USER": "admin",  # DB User
+#         "PASSWORD": "team4123",  # Password
+#         "HOST": "team4rds.cpa0spimmjj8.us-east-2.rds.amazonaws.com",  # 생성한 데이터베이스 엔드포인트
+#         "PORT": "3306",  # 데이터베이스 포트
+#         "OPTIONS": {"init_command": "SET sql_mode='STRICT_TRANS_TABLES'"},
+#     }
+# }
 
 # DATABASES = {
 #     "default": {

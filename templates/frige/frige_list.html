@@ -26,6 +26,9 @@
                   {{ frige.name }}
                 </a>
               </div>
+              <!-- 추가 -->
+              <!-- 냉장고 삭제 링크 -->
+              <a href="{% url 'frige:frige_list' %}?delete_frige_id={{ frige.id }}">냉장고 삭제</a>
             {% endfor %}
           </div>
           <hr>

@@ -7,4 +7,5 @@ urlpatterns = [
     path('', frige_list, name='frige_list'),
     path('<int:frige_id>/', frige_state, name='frige_state'),
     path('quantity/', handle_quantity, name='handle_quantity'),
+    path('delete/', frige_list, name='frige_delete'),
 ]

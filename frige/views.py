@@ -31,7 +31,15 @@ def frige_list(request):
             frige.user = user
             frige.save()
             return redirect('frige:frige_list')
-
+    #추가
+    if request.method == 'GET' and 'delete_frige_id' in request.GET:
+        delete_frige_id = request.GET.get('delete_frige_id')
+        try:
+            frige_to_delete = Frige.objects.get(id=delete_frige_id, user=user)
+            frige_to_delete.delete()
+            return redirect('frige:frige_list')
+        except Frige.DoesNotExist:
+            pass
     context = {
         'friges': friges,
         'form': form
