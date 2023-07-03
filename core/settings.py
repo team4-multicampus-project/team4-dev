@@ -26,8 +26,8 @@ SECRET_KEY = "django-insecure-mdxl(@jb9u&11q(8t-zhv1v@znxs%6uet34p#__t6sbtw+&pzy
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["172.30.1.85", "172.20.10.5"]
-MQTT_BROKER_URL = "172.20.10.5"
+ALLOWED_HOSTS = ["172.30.1.68", "172.20.10.5"]
+MQTT_BROKER_URL = "172.30.1.68"
 
 
 # Application definition
