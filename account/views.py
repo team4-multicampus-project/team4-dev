@@ -51,7 +51,7 @@ def signup(request):
         else:
             print("다시 회원가입해주세요")
             print(form.errors)
-
+    else: SignupForm()
     context = {'form': form}
     return render(request, 'account/signup.html', context)
 
